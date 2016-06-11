@@ -1,0 +1,115 @@
+%% ==================================================================
+%% Name:  Chia Hsuan Wu
+%% SID:   42764118
+%% CSID:  y4d8
+%% ==================================================================
+
+=====================================================================
+Question 4b
+
+Given that there are two lists L1 and L2 with length N1 and N2. The code first set the offset position value to the negative N1 representing the largest offset to the left possible. When the position value is negative, we remove elements from L1 to simulate offset. This process takes O(N1) for P = -N1 to 0. After we have successfully generated a offset list, we pass it to match_count to find the number of matches. By looking at the code for match_count, it would take O(min(N1,N2)) to completele traversal. Once the count number has been determined, we then pass the count value, position and the current max to the matchCompare function to determine if we should replace the current max value or not. This process is rather painless and takes O(1). Finally for P = 0 to N2, we perform similar tasks but with L2. Overall, we have attempt to match both lists with a complexity of roughly O(N1^2 + N2^2). The empirical measurements agrees with the analytical formula above, as shown below.
+
+As the length of the L2 grow by 10 times, the mean time increased by roughly 10^2 times.
+
+3> hw2:bestMatchSeqTimer().
+[[{size,10},
+  {mean,5.095782786400889e-6},
+  {std,2.8231789183045744e-4}],
+ [{size,100},
+  {mean,1.2843630483328538e-4},
+  {std,0.0014114528344638599}],
+ [{size,1000},
+  {mean,0.010108585858585789},
+  {std,0.007479182969283924}],
+ [{size,10000},
+  {mean,1.2178823529411764},
+  {std,0.03807374809652313}]]
+
+As the length of the L1 grow by 10 times, the mean time increased by roughly 10^2 times.
+
+[[{size,10},
+  {mean,5.237194233119486e-6},
+  {std,2.861253910819162e-4}],
+ [{size,100},
+  {mean,1.1372611410681028e-4},
+  {std,0.0013287958009988786}],
+ [{size,1000},
+  {mean,0.009068871771635642},
+  {std,0.007721099756863986}],
+ [{size,10000},
+  {mean,0.8567916666666667},
+  {std,0.018375264959146907}]]
+
+As the length of L1 and L2 both grow by 10 times, the mean time increased by roughly 10^2 times.
+
+[[{size,10},
+  {mean,8.560599254781615e-6},
+  {std,3.657651639830855e-4}],
+ [{size,100},
+  {mean,4.524703646728772e-4},
+  {std,0.0026215281846210647}],
+ [{size,1000},
+  {mean,0.04166666666666683},
+  {std,0.0073698401739302226}],
+ [{size,10000},
+  {mean,4.172},
+  {std,0.036993242626258284}]]
+
+
+
+=====================================================================
+Question 4d
+
+From the data below, we can clearly see that the parallel implementation becomes advantageous after size is roughly above 40 (the break even list size is at size = 40). The sequential version is faster for size 0 to 40.
+In addition, this is only for 4 workers. The mean time for the parallel is likely to decrease as the tree increases the number of workers (until each worker has only 1 number). 
+
+
+List 2 size: 10
+  timing stats for parallel version: {{mean,2.5315527783886545e-5},{std,6.287055839071606e-4}}
+  timing stats for sequential version: {{mean,5.117651269570198e-6},{std,2.827753277683608e-4}}
+  speed-up:  0.202
+List 2 size: 20
+  timing stats for parallel version: {{mean,2.559647488715342e-5},{std,6.322915655866684e-4}}
+  timing stats for sequential version: {{mean,1.089961874747493e-5},{std,4.126022371770709e-4}}
+  speed-up:  0.426
+List 2 size: 30
+  timing stats for parallel version: {{mean,2.8734641334206878e-5},{std,6.697651826188435e-4}}
+  timing stats for sequential version: {{mean,1.8540845978186597e-5},{std,5.380557915876318e-4}}
+  speed-up:  0.645
+List 2 size: 40
+  timing stats for parallel version: {{mean,3.061608215651686e-5},{std,6.912476621285215e-4}}
+  timing stats for sequential version: {{mean,3.073079747663927e-5},{std,6.926283004032916e-4}}
+  speed-up:  1.004
+List 2 size: 50
+  timing stats for parallel version: {{mean,3.330502689112012e-5},{std,7.209953386142098e-4}}
+  timing stats for sequential version: {{mean,4.540590539756242e-5},{std,8.414135128554358e-4}}
+  speed-up:  1.363
+List 2 size: 60
+  timing stats for parallel version: {{mean,3.557174465178821e-5},{std,7.450360473481953e-4}}
+  timing stats for sequential version: {{mean,5.660153401800807e-5},{std,9.390996556427175e-4}}
+  speed-up:  1.591
+List 2 size: 70
+  timing stats for parallel version: {{mean,3.990580397344662e-5},{std,7.889857598019336e-4}}
+  timing stats for sequential version: {{mean,7.202257950708133e-5},{std,0.001059049454733506}}
+  speed-up:  1.805
+List 2 size: 80
+  timing stats for parallel version: {{mean,4.6143199852371314e-5},{std,8.483486869235841e-4}}
+  timing stats for sequential version: {{mean,9.150129737236419e-5},{std,0.001192741837776598}}
+  speed-up:  1.983
+List 2 size: 90
+  timing stats for parallel version: {{mean,5.762446550761673e-5},{std,9.474698874101028e-4}}
+  timing stats for sequential version: {{mean,1.1160390920133283e-4},{std,0.0013164125642896023}}
+  speed-up:  1.937
+List 2 size: 100
+  timing stats for parallel version: {{mean,5.861213213775669e-5},{std,9.555718799450022e-4}}
+  timing stats for sequential version: {{mean,1.3058863470176543e-4},{std,0.001423228677491743}}
+  speed-up:  2.228
+List 2 size: 1000
+  timing stats for parallel version: {{mean,0.0012719409819384388},{std,0.004275236590520491}}
+  timing stats for sequential version: {{mean,0.010309278350515469},{std,0.0074503666593648534}}
+  speed-up:  8.105
+List 2 size: 10000
+  timing stats for parallel version: {{mean,0.09931683168316831},{std,0.007568263596188002}}
+  timing stats for sequential version: {{mean,1.0047000000000001},{std,0.01943679214503065}}
+  speed-up: 10.116
+Completedok
